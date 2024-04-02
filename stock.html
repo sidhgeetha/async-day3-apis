@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stock Market Details</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+  <h1>Stock Market Details</h1>
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8">
+        <input type="text" id="searchInput" class="form-control" placeholder="Enter company name">
+      </div>
+      <div class="col-lg-4">
+        <button class="btn btn-primary" onclick="searchStockData()">Search</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="container mt-3">
+    <div class="row row-gap-3 col-gap-3" id="dataRow"></div>
+  </div>
+
+  <script>
+    function searchStockData() {
+      const searchInput = document.getElementById('searchInput').value.toUpperCase();
+      if (searchInput.trim() === '') {
+        alert('Please enter a company symbol.');
+        return;
+      }
+
+      const apiUrl = `https://www.alphavantage.co/query?function=OVERVIEW&symbol=ibm&apikey=2L8YR55M5NJBMWSX`;
+
+      fetch(apiUrl)
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          return response.json();
+        })
+        .then(data => {
+          displayStockData(data);
+        })
+        .catch(error => {
+          console.error('Error', error);
+        
+        });
+    }
+
+    function displayStockData(data) {
+    //   const dataRow = document.getElementById('dataRow');
+    //   dataRow.innerHTML = '';
+
+      const column = document.createElement('div');
+      column.classList.add('col-lg-12');
+
+      const card = document.createElement('div');
+      card.className = 'card card-header card-body text-center';
+
+      const cardBody = document.createElement('div');
+      cardBody.style = "background-image: linear-gradient(to right,#D0BF9D,#56645E);";
+      cardBody.className = 'card-body';
+
+      const cardTitle = document.createElement('h5');
+      cardTitle.className = 'card-title';
+      cardTitle.textContent = `${data.Name} (${data.Symbol})`;
+
+      const marketCap = document.createElement('p');
+      marketCap.textContent = `Market Capitalization: $${formatNumber(data.MarketCapitalization)}`;
+
+      const revenueTTM = document.createElement('p');
+      revenueTTM.textContent = `Revenue (TTM): $${formatNumber(data.RevenueTTM)}`;
+
+      const peRatio = document.createElement('p');
+      peRatio.textContent = `PE Ratio: ${data.PERatio}`;
+
+      const analystTargetPrice = document.createElement('p');
+      analystTargetPrice.textContent = `Analyst Target Price: $${data.AnalystTargetPrice}`;
+
+      cardBody.appendChild(cardTitle);
+      cardBody.appendChild(marketCap);
+      cardBody.appendChild(revenueTTM);
+      cardBody.appendChild(peRatio);
+      cardBody.appendChild(analystTargetPrice);
+
+      card.appendChild(cardBody);
+      column.appendChild(card);
+      dataRow.appendChild(column);
+    }
+
+    function formatNumber(number) {
+      return parseFloat(number).toLocaleString();
+    }
+  </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

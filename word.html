@@ -1,0 +1,240 @@
+<!-- 
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dictionary Search</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .card-flip {
+            position: relative;
+            perspective: 1000px;
+        }
+
+        .card-flip-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+
+        .card-flip-front,
+        .card-flip-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+        }
+
+        .card-flip-front {
+            z-index: 2;
+            background-color: white;
+        }
+
+        .card-flip-back {
+            transform: rotateY(180deg);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="mt-5 mb-3">Dictionary Search</h1>
+        <div class="mb-3">
+            <label for="searchInput" class="form-label">Enter a word:</label>
+            <input type="text" class="form-control" id="searchInput" placeholder="Type here...">
+        </div>
+        <button class="btn btn-primary mb-3" onclick="search()">Search</button>
+    </div>
+
+    <div class="container" id="rowdiv"></div>
+
+    <script>
+        function search() {
+            const rowdiv = document.getElementById("rowdiv");
+            rowdiv.innerHTML = "";
+
+            const findWord = document.getElementById("searchInput").value;
+            const apiUrl = `https://api.dictionaryapi.dev/api/v2/entries/en/${findWord}`;
+
+            if (!findWord) {
+                alert("Please type a word");
+                return;
+            }
+
+            fetch(apiUrl)
+                .then((response) => response.json())
+                .then((alldata) => {
+                    const carddiv = rowdiv.appendChild(document.createElement("div"));
+                    carddiv.className = "card-flip mb-3 col-sm-md-12";
+
+                    const cardInner = carddiv.appendChild(document.createElement("div"));
+                    cardInner.className = "card-flip-inner";
+
+                    // Front of the card: Display word definitions
+                    const cardFront = cardInner.appendChild(document.createElement("div"));
+                    cardFront.className = "card-flip-front card card-body text-center";
+                    cardFront.innerHTML = `
+                        <h3 class="card-title">Meaning of ${alldata[0].word.toUpperCase()}</h3>
+                        <ul class="list-group">
+                            ${alldata[0].meanings.map(meaning => `
+                                ${meaning.definitions.map(definition => `
+                                    <li class="list-group-item">${definition.definition}</li>
+                                `).join('')}
+                            `).join('')}
+                        </ul>
+                        <button class="btn btn-primary mt-3" onclick="flipCard(this)">View Image</button>
+                    `;
+
+                    // Back of the card: Display image related to the word
+                    const cardBack = cardInner.appendChild(document.createElement("div"));
+                    cardBack.className = "card-flip-back card card-body text-center";
+                    cardBack.innerHTML = `
+                        <h3 class="card-title">Image for ${alldata[0].word.toUpperCase()}</h3>
+                        <img src="https://via.placeholder.com/300" alt="Image for ${alldata[0].word}" class="img-fluid mb-3">
+                        <button class="btn btn-primary" onclick="flipCard(this)">Back to Definitions</button>
+                        <button class="btn btn-success mt-3" onclick="saveCard(this)">Save Card</button>
+                    `;
+                })
+                .catch((error) => {
+                    console.error('Error fetching dictionary data:', error);
+                    alert('Error fetching dictionary data. Please try again later.');
+                });
+        }
+
+      function flipCard(button) {
+    const cardFlip = button.closest('.card-flip');
+    cardFlip.classList.toggle('flipped');
+}
+
+
+        function saveCard(button) {
+            alert("Card saved successfully!");
+        }
+    </script>
+</body>
+</html> -->
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dictionary Search</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .card-flip {
+            position: relative;
+            perspective: 1000px;
+        }
+
+        .card-flip-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+
+        .card-flip-front,
+        .card-flip-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+        }
+
+        .card-flip-front {
+            z-index: 2;
+            background-color: white;
+        }
+
+        .card-flip-back {
+            transform: rotateY(180deg);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="mt-5 mb-3">Dictionary Search</h1>
+        <div class="mb-3">
+            <label for="searchInput" class="form-label">Enter a word:</label>
+            <input type="text" class="form-control" id="searchInput" placeholder="Type here...">
+        </div>
+        <button class="btn btn-primary mb-3" onclick="search()">Search</button>
+    </div>
+
+    <div class="container" id="rowdiv"></div>
+
+    <script>
+        function search() {
+            const rowdiv = document.getElementById("rowdiv");
+            rowdiv.innerHTML = "";
+
+            const findWord = document.getElementById("searchInput").value;
+            const apiUrl = `https://api.dictionaryapi.dev/api/v2/entries/en/${findWord}`;
+
+            if (!findWord) {
+                alert("Please type a word");
+                return;
+            }
+
+            fetch(apiUrl)
+                .then((response) => response.json())
+                .then((alldata) => {
+                    const carddiv = document.createElement("div");
+                    carddiv.className = "card-flip mb-3 col-sm-md-12";
+
+                    const cardInner = document.createElement("div");
+                    cardInner.className = "card-flip-inner";
+
+                    const cardFront = document.createElement("div");
+                    cardFront.className = "card-flip-front card card-body text-center";
+                    cardFront.innerHTML = `
+                        <h3 class="card-title">Meaning of ${alldata[0].word.toUpperCase()}</h3>
+                        <ul class="list-group">
+                            ${alldata[0].meanings.map(meaning => `
+                                ${meaning.definitions.map(definition => `
+                                    <li class="list-group-item">${definition.definition}</li>
+                                `).join('')}
+                            `).join('')}
+                        </ul>
+                        <button class="btn btn-primary mt-3" onclick="flipCard(this)">View Image</button>
+                    `;
+
+                    const cardBack = document.createElement("div");
+                    cardBack.className = "card-flip-back card card-body text-center";
+                    cardBack.innerHTML = `
+                        <h3 class="card-title">Image for ${alldata[0].word.toUpperCase()}</h3>
+                        <img src="https://via.placeholder.com/300" alt="Image for ${alldata[0].word}" class="img-fluid mb-3">
+                        <button class="btn btn-primary" onclick="flipCard(this)">Back to Definitions</button>
+                        <button class="btn btn-success mt-3" onclick="saveCard(this)">Save Card</button>
+                    `;
+
+                    cardInner.appendChild(cardFront);
+                    cardInner.appendChild(cardBack);
+                    carddiv.appendChild(cardInner);
+                    rowdiv.appendChild(carddiv);
+                })
+                .catch((error) => {
+                    console.error('Error fetching dictionary data:', error);
+                    alert('Error fetching dictionary data. Please try again later.');
+                });
+        }
+
+        function flipCard(button) {
+            const cardFlip = button.closest('.card-flip');
+            cardFlip.classList.toggle('flipped');
+        }
+
+        function saveCard(button) {
+            alert("Card saved successfully!");
+        }
+    </script>
+</body>
+</html>
